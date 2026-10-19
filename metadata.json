@@ -1,0 +1,6 @@
+{
+  "name": "Dukaan Orbit",
+  "description": "Smart Kirana POS billing counter, inventory stock hub, and customer online storefront for neighborhood retail.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

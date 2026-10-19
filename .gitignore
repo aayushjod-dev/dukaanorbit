@@ -1,0 +1,31 @@
+# Dependencies & Build artifacts
+node_modules/
+dist/
+build/
+coverage/
+.DS_Store
+*.log
+
+# Environment variables & Local configurations
+.env
+.env.*
+!.env.example
+*.local
+
+# Firebase, Google Cloud & API Service Account Credentials
+serviceAccount*.json
+firebase-adminsdk*.json
+*credentials*.json
+*token*.json
+
+# SSL, SSH & Cryptographic Private Keys
+*.pem
+*.key
+*.cert
+*.p12
+
+# IDE & Editor caches
+.vscode/
+.idea/
+*.swp
+*.swo

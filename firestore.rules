@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Authentication helper
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Tenant isolation: verifies request belongs to the authenticated shop owner
+    function isShopOwner(shopId) {
+      return isAuthenticated() && request.auth.uid == shopId;
+    }
+
+    // Multi-tenant shop data protection
+    match /shops/{shopId} {
+      // Only the authenticated shop owner can access or modify private store settings
+      allow read, write: if isShopOwner(shopId);
+
+      // Inventory: public storefront can read product catalog; only owner can modify stock & pricing
+      match /inventory/{productId} {
+        allow read: if true;
+        allow write: if isShopOwner(shopId);
+      }
+
+      // Sales, customer bills, and Khata ledger: strictly private to the shop owner
+      match /bills/{billId} {
+        allow read, write: if isShopOwner(shopId);
+      }
+
+      // Online delivery orders: customers can submit orders; only shop owner can manage them
+      match /orders/{orderId} {
+        allow create: if true;
+        allow read, update, delete: if isShopOwner(shopId);
+      }
+    }
+
+    // Catch-all: deny all unauthenticated or unmapped document access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
